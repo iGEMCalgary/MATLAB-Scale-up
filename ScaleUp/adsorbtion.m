@@ -21,7 +21,7 @@ ode2 = diff(qi,t) == kovi*(qsi - qi);
 
 % boundary conditions
 cond1 = diff(Ci(0,t),0) == v/Dazi*(Ci-Cifeed); %z=0
-cond2 = diff(Ci(L,t),L) == v/Dazi*(Ci-Cifeed); %z=L
+cond2 = diff(Ci(L,t),L) == 0; %z=L
 cond3 = Ci(z,0) == 0; %t=0
 conds = [cond1 cond2 cond3];
 
