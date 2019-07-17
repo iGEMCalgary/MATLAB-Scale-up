@@ -1,16 +1,20 @@
-% Solve ODE set for CFM1 with inputed conditions 
+%{
+Solve ODE set for CFM1 with inputed conditions 
+Solves the chemical species as a function of time
+%}
+
 clc; 
 load('values.mat');
 
 % get reaction 1 solved
-[t,y] = ode45(@(t,y)CFM1(t,y,values.E,values.K,values.k,values.Temp,values.pH),values.tspan,values.S,values.options);
+[t,y] = ode45(@(t,y)CFM1_1(t,y,values.E,values.K,values.k,values.Temp(1),values.pH(1)),values.tspan,values.S,values.options);
 
 %save values at 95% (assume only chb,chb-fancy, and cha get changed)
 cell_95=Xforlvl95(y(:,3),1);
 values.S = y(cell_95,:);
 
 % get reaction 2 solved
-[t2,y2] = ode45(@(t2,y2)CFM1_2(t2,y2,values.E,values.K,values.k,values.Temp,values.pH),values.tspan,values.S,values.options);
+[t2,y2] = ode45(@(t2,y2)CFM1_2(t2,y2,values.E,values.K,values.k,values.Temp(2),values.pH(2)),values.tspan,values.S,values.options);
 
 figure 
 subplot(2,1,1)

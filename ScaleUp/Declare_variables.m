@@ -3,16 +3,16 @@
 %either
 %Cycling is not included yet 
 % author: Sebastian Alvarez
-% version 1.0
-% since July 11th 2019
-% changes: Jean-David Rousseau
+% version 1.1
+% since July 16th 2019
+% changes: Sebastian Alvarez 
 
 S = [6 0 2 0 0]; %ChlB HdChLA ChlA PhyA PhoA 
 E = [10 10 10 10]; %
 K = [8.44 12.5 6 15]; %Km 
 k = [0.000444 0.0015 0.005 0.001]; %kcat
-Temp = 308; %K
-pH = 7.0;
+Temp = [308 308]; %K
+pH = [7.0 7.0];
 tspan = [0 10000];  
 
 options = odeset('NonNegative', 1:5); 
