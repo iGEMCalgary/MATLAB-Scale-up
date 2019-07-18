@@ -5,7 +5,7 @@
 %version 1.0
 %since July 3rd 2019
 
-
+close all
 %set up x-axis
 x_initial=0.012;
 x_scale=[0 x_initial];
@@ -106,7 +106,7 @@ end
 %Plot 3 lines
 figure
 hold off
-plot(x_scale,equilibrium,'g',x_top,top_operating_line,'b',x_bottom,bottom_operating_line,'b', x_scale, line_intersect_y*ones(size(x_scale)),'k')
+plot(x_scale,equilibrium,'g',x_top,top_operating_line,'b',x_bottom,bottom_operating_line,'c', x_scale, line_intersect_y*ones(size(x_scale)),'k')
 
 %Pre-Plot McCabe Thiele diagram lines 
 %Constructing each line requires 2 points
@@ -134,3 +134,15 @@ while(xx<m)
     end
     xx=xx+1;
 end
+
+%formatting
+title('McCabe-Thiele Diagram');
+xlabel('Component A fraction','fontsize',16); 
+ylabel('Component B fraction','fontsize',16);
+ylim([0 inf]);
+legend({'equilibrium','top operating line', 'bottom operating line', 'change', 'steps'},'Location','southeast','NumColumns',2);
+dim = [0.2 0.5 0.4 0.3];
+num1 = sprintf('%0.3f',eq_count);
+num2 = sprintf('%0.3f',line_intersect_y); 
+str = {strcat('Steps = ',num1), strcat('change = ',num2)};
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
