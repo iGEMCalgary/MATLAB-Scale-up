@@ -18,7 +18,7 @@ figure
 hold on
 plot(x_triangle,triangle,'k');
 
-%draw horizontal lines
+%draw horizontal lines (red)
 div = 10;
 div = scale/div;
 i=div;
@@ -67,13 +67,35 @@ for i = 1:size(startpoints)
         end
     end
 end
-% disp(intersection_points);
 
 %calculate positions of intersection based on triangle edge values, use
 %inverted triangle to calculate the three values. declare empty array of
 %size intersection points but 3 extra columns. from there algorithm to use
 %first two values, and scale to calculate all other values
-disp(zeros(19,5))
+disp(' xcoor \\ ycoor \\ bottomside \\ leftside \\ rightside')
+sized = size(intersection_points);
+intersection_points = [intersection_points zeros(sized(1),3)];
+intersection_points(:,3)=intersection_points(:,1); %copy col 1 to col 3
+for i=1:sized(1)
+    if(intersection_points(i,2)==0) %indicator for not a point
+        continue
+    else
+        x = intersection_points(i,1);
+        y = intersection_points(i,2);
+        %left side
+        xl = (x+y/tan60)*0.5;
+        yl = xl*tan60;
+        intersection_points(i,4) = scale - sqrt(xl^2+yl^2);
+        %right side
+        xr = (x+(2*top-y)/tan60)/2;
+        xr = scale - xr;
+        yr = xr*tan60;
+        intersection_points(i,5) = sqrt(xr^2+yr^2);
+    end
+end
+disp(intersection_points)
+disp(' xcoor \\ ycoor \\ bottomside \\ leftside \\ rightside')
+
 %Plot fanciness
 xlim([0 scale]);
 ylim([0 top]);
