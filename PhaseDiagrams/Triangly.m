@@ -31,7 +31,7 @@ while(i<scale)
     new_height = i*sin60;
     red_heights = [red_heights new_height];  %#ok<AGROW>
     new_h=new_height*ones(size(new_x_h));
-    plot(new_x_h,new_h,'r');
+    plot(new_x_h,new_h,'r','HandleVisibility','off');
     i=i+div;
 end
 
@@ -39,12 +39,18 @@ end
 startpoints=zeros(2,19);
 step=5;
 i=step;
+leg = true;
 while(i<scale)
     index = i/5;
     startpoints(index,1)=scale - i*cos60;
     startpoints(index,2)=i*sin60;
     x_dilution = linspace(0,startpoints(index,1),10);
-    plot(x_dilution,startpoints(index,2)/startpoints(index,1)*x_dilution,'b');
+    if(leg)
+        plot(x_dilution,startpoints(index,2)/startpoints(index,1)*x_dilution,'b');
+        leg = false;
+    else
+        plot(x_dilution,startpoints(index,2)/startpoints(index,1)*x_dilution,'b','HandleVisibility','off');
+    end
     i=i+step;
 end
 
@@ -64,6 +70,10 @@ for i = 1:size(startpoints)
             entry = [x_val_on_line,red_heights(j)];
             intersection_points = [intersection_points; entry]; %#ok<AGROW>
             plot(x_val_on_line,red_heights(j),'ro');
+            %figure out how to display all values later
+            %num1 = sprintf('%0.2f',x_val_on_line);
+            %num2 = sprintf('%0.2f',red_heights(j)); 
+            %text(x_val_on_line,red_heights(j),strcat('x',num1,'y',num2), 'FontSize',4);
         end
     end
 end
@@ -98,7 +108,7 @@ disp(' xcoor \\ ycoor \\ bottomside \\ leftside \\ rightside');
 
 %Plot fanciness
 xlim([0 scale]);
-ylim([0 top]);
-title('sebby');
-xlabel('x','fontsize',16); 
-ylabel('U','fontsize',16);
+ylim([0 inf]);
+title('Dilution Phase diagram helper');
+xlabel('Component A','fontsize',16); 
+legend({'Triangle','Dilution Lines', 'Useful Intersects'},'Location','northeast');
