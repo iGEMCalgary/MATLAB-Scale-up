@@ -4,6 +4,7 @@
 ...central difference in space (both Implicit and Explicit)
 
 %%
+close all
 %Specifying Parameters
 nx=50;               %Number of steps in space(x)
 nt=30;               %Number of time steps 
@@ -14,26 +15,25 @@ u=zeros(nx,1);       %Preallocating u
 un=zeros(nx,1);      %Preallocating un
 vis=0.01;            %Diffusion coefficient/viscosity
 beta=vis*dt/(dx*dx); %Stability criterion (0<=beta<=0.5, for explicit)
-UL=1;                %Left Dirichlet B.C
-UR=1;                %Right Dirichlet B.C
+UL=3;                %Left Dirichlet B.C
+UR=0;                %Right Dirichlet B.C
 UnL=1;               %Left Neumann B.C (du/dn=UnL) 
 UnR=1;               %Right Neumann B.C (du/dn=UnR) 
 
 %%
-%Initial Conditions: A square wave
-for i=1:nx
-    if ((0.75<=x(i))&&(x(i)<=1.25))
-        u(i)=2;
-    else
-        u(i)=1;
-    end
-end
+%Initial Conditions: feed entry
+u(1)=3;
 
 %%
 %B.C vector
 bc=zeros(nx-2,1);
-bc(1)=vis*dt*UL/dx^2; bc(nx-2)=vis*dt*UR/dx^2;  %Dirichlet B.Cs
-%bc(1)=-UnL*vis*dt/dx; bc(nx-2)=UnR*vis*dt/dx;  %Neumann B.Cs
+%Dirichlet B.Cs
+bc(1)=vis*dt*UL/dx^2; 
+bc(nx-2)=vis*dt*UR/dx^2;  
+%Neumann B.Cs
+%bc(1)=-UnL*vis*dt/dx; 
+%bc(nx-2)=UnR*vis*dt/dx;  
+
 %Calculating the coefficient matrix for the implicit scheme
 E=sparse(2:nx-2,1:nx-3,1,nx-2,nx-2);
 A=E+E'-2*speye(nx-2);        %Dirichlet B.Cs
@@ -55,7 +55,7 @@ for it=0:nt
     %Uncomment as necessary
     %-------------------
     %Implicit solution
-    
+    disp(u(1))
     U=un;U(1)=[];U(end)=[];
     U=U+bc;
     U=D\U;

@@ -1,3 +1,10 @@
+% Economic Costs of Protein production
+% author: Jean-David Rousseau
+% version 1.0
+% Last updated July 26th 2019
+
+clear all
+close all
 % static lab costs CAD/unit
 centrifuge = 5000; 
 hood = 15000;
@@ -103,3 +110,31 @@ world_money = 104000000000000;
 lol = protein/world_money; %160 000x the worlds money supply
 
 % concentration of protein
+%disp('Buying');
+%disp(protein);
+disp('Growth by manual');
+disp(isolation_cost);
+%disp('Antibody (Bioreactor Chromatography) 12.5m2 Bioreactor, and max 2m Chromatography');
+%disp('192000$');
+%disp('Antibody (Bioreactor Chromatography) 6x12.5m2 Bioreactor, and max 2m Chromatography');
+%disp('156000$');
+
+different_processes = {'Buying', 'Lab Method', 'Antibody 1bioreactor', 'Antibody 6bioreactors', 'Insulin' };
+different_processes_sorted = categorical(different_processes);
+y=[protein isolation_cost 192000000 156000000 25000000 ];
+
+figure
+hold off
+subplot(2,1,1)
+bar(different_processes_sorted,y);
+legend('cost per tonne');
+set(gca, 'YScale', 'log');
+title('Cost of Proteins per tonne, Using different Methods');
+ylabel('Cost $/tonne logarithmic');
+
+hold off
+subplot(2,1,2)
+different_processes_sorted = categorical(different_processes(2:end));
+bar(different_processes_sorted,y(2:end))
+legend('cost per tonne');
+ylabel('Cost $/tonne');
