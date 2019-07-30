@@ -19,7 +19,7 @@ hold on
 plot(x_triangle,triangle,'k');
 
 %draw horizontal lines (red)
-div = 10;
+div = 8;
 div = scale/div;
 i=div;
 red_heights=[];
@@ -36,9 +36,12 @@ while(i<scale)
 end
 
 %draw dilution lines
-altitude=10*sin60;
-a=0.1;
-while (altitude<20)
+altitude=10;
+green=[0,1,0];
+blue=[0,0,1];
+purple=[0.5,0,0.5];
+a=blue;
+while (altitude<90)
     right_end = (2*top-altitude)/tan60;
     left_start=altitude/tan60;
     moving_point=0;
@@ -47,12 +50,18 @@ while (altitude<20)
             slope_dilution_line=altitude/(moving_point);
             x_endpoint_dilution_line=(2*top)/(slope_dilution_line+tan60);
             y_endpoint_dilution_line=x_endpoint_dilution_line*slope_dilution_line;
-            plot([0 x_endpoint_dilution_line],[0 y_endpoint_dilution_line], 'Color', [a,0.5,0.5]);
+            plot([0 x_endpoint_dilution_line],[0 y_endpoint_dilution_line],'Color', a);
         end
         moving_point=moving_point+10;
     end
-    altitude=altitude+10*sin60;
-    a=a+0.1;
+    altitude=altitude+10;
+    if(isequal(a,green))
+        a=blue;
+    elseif(isequal(a,blue))
+        a=purple;
+    elseif(isequal(a,purple))
+        a=green;
+    end
 end
 
 % calculate intersection points between the redheights and the
