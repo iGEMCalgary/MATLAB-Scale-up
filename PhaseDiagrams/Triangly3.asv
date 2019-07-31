@@ -93,9 +93,9 @@ num_intersection_points=num_intersection_points(1);
 intersection_points = [intersection_points zeros(num_intersection_points,3)];
 disp(' xcoor \\ ycoor \\ bottomside \\ leftside \\ rightside')
 intersection_points(:,5)=intersection_points(:,2);
-intersection_points(:,3)=intersection_points(:,1)-intersection_points(:,2)./tan60;
-intersection_points(:,4)=100-intersection_points(:,3)-intersection_points(:,5);
-disp(intersection_points);
+intersection_points(:,4)=intersection_points(:,1)-intersection_points(:,2)./tan60;
+intersection_points(:,3)=intersection_points(:,4)-intersection_points(:,5).+100;
+
 %Plot fanciness
 xlim([0 scale]);
 ylim([0 top]);
