@@ -109,32 +109,84 @@ world_money = 104000000000000;
 
 lol = protein/world_money; %160 000x the worlds money supply
 
-% concentration of protein
-%disp('Buying');
-%disp(protein);
-disp('Growth by manual');
-disp(isolation_cost);
-%disp('Antibody (Bioreactor Chromatography) 12.5m2 Bioreactor, and max 2m Chromatography');
-%disp('192000$');
-%disp('Antibody (Bioreactor Chromatography) 6x12.5m2 Bioreactor, and max 2m Chromatography');
-%disp('156000$');
+% Where does our project fit in?
+%Base assumptions, refinery operates at a 3% profit, given this, we
+%extrapolate that we have 30000$/day to work with. Given this information we
+%can then assume the process costs based on published values of utilities,
+%from there we can see what is our target lost protein/MT yOIL produced
 
-different_processes = {'Buying', 'Lab Method', 'Antibody 1bioreactor', 'Antibody 6bioreactors', 'Insulin' };
-different_processes_sorted = categorical(different_processes);
-y=[protein isolation_cost 192000000 156000000 25000000 ];
+%first off the cost of the facility add-on for our project to work in. 
+profit_day = 30000; %cad/day
+cost_add_on = 10000000; %Cad
+cost_add_utilities = 2.5; %CAD/MT
+tonnes_day = 1000; %large facility
+%assume our process lets refineries reduce cost by reducing the amount of
+%heat they need to use for the clays. assumption is 0.5% of PROFITS
+profit_day = 1.005*profit_day;
+interest_investment = 0.05; %assume 5% interest rate yearly
+interest_investment = interest_investment/365; % get daily rate
+cost_operation = 65000*4; %pay for 4 people at a decent salary for the add-on, per yr
+cost_operation = cost_operation/365;
+protein_cost = 25000000; %CAD/tonne
+protein_lost = 0.001; %tonnes lost/ tonnes yOIL  produced
+%this relationship to figure out time to reimbursment can be simply
+%explained as linear relationships. left to reimburse =
+%gain/day*day+initial investment
+gain_per_day = profit_day - cost_add_utilities*tonnes_day - cost_operation;
+days = linspace(0,1000000, 1000001);
+% recycle_0 = zeros(10000,1);
+% recycle_10th = zeros(10000,1);
+% recycle_100th = zeros(10000,1);
+% recycle_1000th = zeros(10000,1);
+recycle = zeros(1000000,4);
+for i=days
+    if(i<1)
+        %base case
+        recycle(1,1)=-cost_add_on;
+        recycle(1,2)=-cost_add_on;
+        recycle(1,3)=-cost_add_on;
+        recycle(1,4)=-cost_add_on;
+    elseif(i<2)
+        %need to calculate based on remainder for interest
+        recycle(i+1,1)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost;
+        recycle(i+1,2)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/10;
+        recycle(i+1,3)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/100;
+        recycle(i+1,4)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/1000;
+    else
+        %need to calculate based on remainder for interest
+        recycle(i+1,1)=gain_per_day*(i+1)-recycle(i,1)*interest_investment-cost_add_on - (i+1)*protein_cost/1;
+        recycle(i+1,2)=gain_per_day*(i+1)-recycle(i,2)*interest_investment-cost_add_on - (i+1)*protein_cost/10;
+        recycle(i+1,3)=gain_per_day*(i+1)-recycle(i,3)*interest_investment-cost_add_on - (i+1)*protein_cost/100;
+        recycle(i+1,4)=gain_per_day*(i+1)-recycle(i,4)*interest_investment-cost_add_on - (i+1)*protein_cost/1000;
+    end
+end
 
 figure
 hold off
-subplot(2,1,1)
-bar(different_processes_sorted,y);
-legend('cost per tonne');
-set(gca, 'YScale', 'log');
-title('Cost of Proteins per tonne, Using different Methods');
-ylabel('Cost $/tonne logarithmic');
+plot(days, recycle) 
+legend('no recycling','1/10 protein loss', '1/100 protein loss', '1/1000 protein loss');
+title('How much does our protein need to be recycled, assuming cost is similar to Insulin');
+ylabel('Debt (CAD)');
+xlabel('Time (Days)')
+ylim([-20000000, 0]);
+% Plotting
 
-hold off
-subplot(2,1,2)
-different_processes_sorted = categorical(different_processes(2:end));
-bar(different_processes_sorted,y(2:end))
-legend('cost per tonne');
-ylabel('Cost $/tonne');
+% different_processes = {'Buying', 'Lab Method', 'Antibody 1bioreactor', 'Antibody 6bioreactors', 'Insulin' };
+% different_processes_sorted = categorical(different_processes);
+% y=[protein isolation_cost 192000000 156000000 25000000 ];
+% 
+% figure
+% hold off
+% subplot(2,1,1)
+% bar(different_processes_sorted,y);
+% legend('cost per tonne');
+% set(gca, 'YScale', 'log');
+% title('Cost of Proteins per tonne, Using different Methods');
+% ylabel('Cost $/tonne logarithmic');
+% 
+% hold off
+% subplot(2,1,2)
+% different_processes_sorted = categorical(different_processes(2:end));
+% bar(different_processes_sorted,y(2:end))
+% legend('cost per tonne');
+% ylabel('Cost $/tonne');
