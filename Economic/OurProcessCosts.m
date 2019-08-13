@@ -3,7 +3,7 @@
 % version 1.0
 % Last updated July 26th 2019
 
-clear all
+% clear all
 close all
 % static lab costs CAD/unit
 centrifuge = 5000; 
@@ -114,11 +114,14 @@ lol = protein/world_money; %160 000x the worlds money supply
 %extrapolate that we have 30000$/day to work with. Given this information we
 %can then assume the process costs based on published values of utilities,
 %from there we can see what is our target lost protein/MT yOIL produced
+%using enzymes is likely a viable process as industrial enzymes are used in
+%the degumming process (Phospholipase A1) of processing canola, so we must transform our
+%product into what will likely be an immobilized enzyme solution
 
 %first off the cost of the facility add-on for our project to work in. 
-profit_day = 30000; %cad/day
+profit_day = 25000; %cad/day
 cost_add_on = 10000000; %Cad
-cost_add_utilities = 2.5; %CAD/MT
+cost_add_utilities = 7.5; %CAD/MT
 tonnes_day = 1000; %large facility
 %assume our process lets refineries reduce cost by reducing the amount of
 %heat they need to use for the clays. assumption is 0.5% of PROFITS
@@ -127,7 +130,7 @@ interest_investment = 0.05; %assume 5% interest rate yearly
 interest_investment = interest_investment/365; % get daily rate
 cost_operation = 65000*4; %pay for 4 people at a decent salary for the add-on, per yr
 cost_operation = cost_operation/365;
-protein_cost = 25000000; %CAD/tonne
+protein_cost = 5000000; %CAD/tonne
 protein_lost = 0.001; %tonnes lost/ tonnes yOIL  produced
 %this relationship to figure out time to reimbursment can be simply
 %explained as linear relationships. left to reimburse =
@@ -149,44 +152,44 @@ for i=days
     elseif(i<2)
         %need to calculate based on remainder for interest
         recycle(i+1,1)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost;
-        recycle(i+1,2)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/10;
-        recycle(i+1,3)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/100;
-        recycle(i+1,4)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/1000;
+        recycle(i+1,2)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/100;
+        recycle(i+1,3)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/300;
+        recycle(i+1,4)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/500;
     else
         %need to calculate based on remainder for interest
         recycle(i+1,1)=gain_per_day*(i+1)-recycle(i,1)*interest_investment-cost_add_on - (i+1)*protein_cost/1;
-        recycle(i+1,2)=gain_per_day*(i+1)-recycle(i,2)*interest_investment-cost_add_on - (i+1)*protein_cost/10;
-        recycle(i+1,3)=gain_per_day*(i+1)-recycle(i,3)*interest_investment-cost_add_on - (i+1)*protein_cost/100;
-        recycle(i+1,4)=gain_per_day*(i+1)-recycle(i,4)*interest_investment-cost_add_on - (i+1)*protein_cost/1000;
+        recycle(i+1,2)=gain_per_day*(i+1)-recycle(i,2)*interest_investment-cost_add_on - (i+1)*protein_cost/100;
+        recycle(i+1,3)=gain_per_day*(i+1)-recycle(i,3)*interest_investment-cost_add_on - (i+1)*protein_cost/300;
+        recycle(i+1,4)=gain_per_day*(i+1)-recycle(i,4)*interest_investment-cost_add_on - (i+1)*protein_cost/500;
     end
 end
 
 figure
 hold off
 plot(days, recycle) 
-legend('no recycling','1/10 protein loss', '1/100 protein loss', '1/1000 protein loss');
+legend('no recycling','1/100 protein loss', '1/300 protein loss', '1/500 protein loss');
 title('How much does our protein need to be recycled, assuming cost is similar to Insulin');
 ylabel('Debt (CAD)');
 xlabel('Time (Days)')
 ylim([-20000000, 0]);
 % Plotting
+% https://studylib.net/doc/7258453/cost-of-enzymes
+different_processes = {'Buying', 'Lab Method', 'Antibody 1bioreactor', 'Antibody 6bioreactors', 'Insulin', 'Immobilized Enzyme High', 'Immobilized Enzyme Low', 'Reg Enzyme High', 'Reg Enzyme Low' };
+different_processes_sorted = categorical(different_processes);
+y=[protein isolation_cost 192000000 156000000 25000000 5000000 500000 120000 50000 ];
 
-% different_processes = {'Buying', 'Lab Method', 'Antibody 1bioreactor', 'Antibody 6bioreactors', 'Insulin' };
-% different_processes_sorted = categorical(different_processes);
-% y=[protein isolation_cost 192000000 156000000 25000000 ];
-% 
-% figure
-% hold off
-% subplot(2,1,1)
-% bar(different_processes_sorted,y);
-% legend('cost per tonne');
-% set(gca, 'YScale', 'log');
-% title('Cost of Proteins per tonne, Using different Methods');
-% ylabel('Cost $/tonne logarithmic');
-% 
-% hold off
-% subplot(2,1,2)
-% different_processes_sorted = categorical(different_processes(2:end));
-% bar(different_processes_sorted,y(2:end))
-% legend('cost per tonne');
-% ylabel('Cost $/tonne');
+figure
+hold off
+subplot(2,1,1)
+bar(different_processes_sorted,y);
+legend('cost per tonne');
+set(gca, 'YScale', 'log');
+title('Cost of Proteins per tonne, Using All Methods');
+ylabel('Cost $/tonne logarithmic');
+
+hold off
+subplot(2,1,2)
+different_processes_sorted = categorical(different_processes(3:end));
+bar(different_processes_sorted,y(3:end))
+legend('cost per tonne');
+ylabel('Cost $/tonne');
