@@ -152,13 +152,13 @@ for i=days
     elseif(i<2)
         %need to calculate based on remainder for interest
         recycle(i+1,1)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost;
-        recycle(i+1,2)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/100;
+        recycle(i+1,2)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/1000;
         recycle(i+1,3)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/300;
         recycle(i+1,4)=gain_per_day*(i+1)-cost_add_on - (i+1)*protein_cost/500;
     else
         %need to calculate based on remainder for interest
         recycle(i+1,1)=gain_per_day*(i+1)-recycle(i,1)*interest_investment-cost_add_on - (i+1)*protein_cost/1;
-        recycle(i+1,2)=gain_per_day*(i+1)-recycle(i,2)*interest_investment-cost_add_on - (i+1)*protein_cost/100;
+        recycle(i+1,2)=gain_per_day*(i+1)-recycle(i,2)*interest_investment-cost_add_on - (i+1)*protein_cost/1000;
         recycle(i+1,3)=gain_per_day*(i+1)-recycle(i,3)*interest_investment-cost_add_on - (i+1)*protein_cost/300;
         recycle(i+1,4)=gain_per_day*(i+1)-recycle(i,4)*interest_investment-cost_add_on - (i+1)*protein_cost/500;
     end

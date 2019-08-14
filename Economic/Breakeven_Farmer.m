@@ -5,7 +5,7 @@
 clear all
 close all
 
-estimated_cost_acre = 423.58;
+estimated_cost_acre = 300;
 
 
 yield_acre = [30 110]; % bushels per acre

@@ -6,6 +6,7 @@
 % clear all
 close all
 
+% alibaba
 cost_of_clay_tonne = 300 * 0.907185; % USD per ton * tonne/ton
 cost_of_clay_shipping = 2000; % USD per Container (20 tonnes)
 cost_of_clay = cost_of_clay_shipping + 20 * cost_of_clay_tonne; % Price for 20 tonnes
@@ -47,7 +48,7 @@ price_oil_RBD = 1273.30; % India price converted to CAD/tonne
 
 revenue_crush=price_meal*volume_meal;
 profit_crush_green = revenue_crush-price_seed*volume_seed;
-profit_crush_y = profit_crush_green+volume_oil_crude*volume_oil_crude;
+profit_crush_y = profit_crush_green+volume_oil_crude*price_oil_crude;
 revenue_refine = price_oil_RBD*volume_oil_RBD;
 % profit_refine = revenue_refine-cost_refinery- price_oil_crude*volume_oil_crude;
 profit_refine = revenue_refine*0.03; % assume 3% profit until more data feeds in
