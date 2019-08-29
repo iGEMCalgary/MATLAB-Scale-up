@@ -1,17 +1,22 @@
 % Creates Plot of costs per acre and revenue per acre
 % author: Jean-David Rousseau
 % version 1.0
-% since July 4th 2019
-clear all
+% since August 24th 2019
+
+% clear all
 close all
 
-estimated_cost_acre = 300;
+estimated_cost_acre = linspace(1, 500, 10);
 
+yield_acre = linspace(30, 110, 10); % bushels per acre range from 0 to 110
+price_bushel = linspace (1, 12, 10); % sell price per bushel range from 1 to 12
 
-yield_acre = [30 110]; % bushels per acre
-price_bushel = [1 12]; % sell price per bushel
-breakeven_price = estimated_cost_acre./yield_acre;
-
+breakeven_price = zeros(10,10);
+for ii=linspace(1, 10, 10)
+    for jj = linspace(1,10, 10)
+        breakeven_price(ii, jj) = estimated_cost_acre(ii)/yield_acre(jj);
+    end
+end
 grade_1_price = [9.06 10.66]; %y vals
 grade_2_price = [4 6]; %y vals
 
@@ -19,59 +24,61 @@ usual_yield = [35 45]; %x vals
 
 figure 
 hold on
-
-plot(yield_acre, breakeven_price, 'r');
+plot(breakeven_price)
+% for ii=linspace(1, 10, 10)
+%     plot(yield_acre, breakeven_price(:,ii), 'r');
+% end
 xlabel('yield (bu/acre)');
 ylabel('price (CAN/bu)');
 legend('breakeven price');
-title('breakeven price based on yield per acre - change due to grade 2 becoming more viable');
+title('breakeven price based on yield per acre');
 
 
-
-%Average Yield
-left = usual_yield(1);
-right = usual_yield(2);
-bottomright = 12;
-topright =12.5;
-bottomleft = 13.25;
-topleft = 13.75;
-x = [left left right right];
-y = [bottomleft topleft topright bottomright];
-fill(x, y, [0.8,0.8, 0.5],'HandleVisibility','off');
-txt = '\downarrow Average Yield';
-text(40,14,txt)
-
-slope = -0.1284;
-for i=1:20
-    dx = i;
-    dy = i*slope;
-    %Grade 1 price highlight
-    leftup = 55+dx/3;
-    leftdown = 67+dx/3;
-    rightup = 59+dx/3;
-    rightdown = 71+dx/3;
-    bottom = grade_1_price(1)+dy/3;
-    top = grade_1_price(2)+dy/3;
-    x = [leftdown leftup rightup rightdown];
-    y = [bottom top top bottom];
-    fill(x, y, [0.9290,0.9940, 0.5250],'HandleVisibility','off')
-    txt = '\leftarrow Grade 1 Price';
-    text(70,10,txt)
-
-    %Grade 2 price highlight
-    leftup = 91-dx;
-    leftdown = 107-dx;
-    rightup = 95-dx;
-    rightdown = 110-dx;
-    bottom = grade_2_price(1)-dy;
-    top = grade_2_price(2)-dy;
-    x = [leftdown leftup rightup rightdown];
-    y = [bottom top top bottom];
-    fill(x, y, [0.6,0.8, 0.5],'HandleVisibility','off');
-    txt = 'Grade 2 Price \rightarrow';
-    text(70,5,txt)
-    pause(0.1);
-end
+%%
+% %Average Yield
+% left = usual_yield(1);
+% right = usual_yield(2);
+% bottomright = 12;
+% topright =12.5;
+% bottomleft = 13.25;
+% topleft = 13.75;
+% x = [left left right right];
+% y = [bottomleft topleft topright bottomright];
+% fill(x, y, [0.8,0.8, 0.5],'HandleVisibility','off');
+% txt = '\downarrow Average Yield';
+% text(40,14,txt)
+% 
+% slope = -0.1284;
+% for i=1:20
+%     dx = i;
+%     dy = i*slope;
+%     %Grade 1 price highlight
+%     leftup = 55+dx/3;
+%     leftdown = 67+dx/3;
+%     rightup = 59+dx/3;
+%     rightdown = 71+dx/3;
+%     bottom = grade_1_price(1)+dy/3;
+%     top = grade_1_price(2)+dy/3;
+%     x = [leftdown leftup rightup rightdown];
+%     y = [bottom top top bottom];
+%     fill(x, y, [0.9290,0.9940, 0.5250],'HandleVisibility','off')
+%     txt = '\leftarrow Grade 1 Price';
+%     text(70,10,txt)
+% 
+%     %Grade 2 price highlight
+%     leftup = 91-dx;
+%     leftdown = 107-dx;
+%     rightup = 95-dx;
+%     rightdown = 110-dx;
+%     bottom = grade_2_price(1)-dy;
+%     top = grade_2_price(2)-dy;
+%     x = [leftdown leftup rightup rightdown];
+%     y = [bottom top top bottom];
+%     fill(x, y, [0.6,0.8, 0.5],'HandleVisibility','off');
+%     txt = 'Grade 2 Price \rightarrow';
+%     text(70,5,txt)
+%     pause(0.1);
+% end
 
 
 
